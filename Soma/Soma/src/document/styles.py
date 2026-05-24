@@ -12,7 +12,7 @@ from __future__ import annotations
 from docx.document import Document as DocxDocument
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt, RGBColor, Inches
+from docx.shared import Inches, Pt, RGBColor
 
 
 # Style name constants — referenced from the builder so we never type
@@ -33,6 +33,15 @@ def _set_font(style, *, size_pt: int, bold: bool) -> None:
     font.size = Pt(size_pt)
     font.bold = bold
     font.color.rgb = BLACK
+
+
+def _get_or_create_paragraph_style(styles, name: str, *, base_style_name: str):
+    try:
+        return styles[name]
+    except KeyError:
+        style = styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
+        style.base_style = styles[base_style_name]
+        return style
 
 
 def register_styles(doc: DocxDocument) -> None:
@@ -74,8 +83,8 @@ def register_styles(doc: DocxDocument) -> None:
         body.base_style = styles["Normal"]
         _set_font(body, size_pt=11, bold=False)
         body.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        body.paragraph_format.space_after = Pt(0)
         body.paragraph_format.space_before = Pt(0)
+        body.paragraph_format.space_after = Pt(0)
         body.paragraph_format.line_spacing = 1.0
 
     # --- Table cell text style ------------------------------------------------
@@ -92,14 +101,13 @@ def register_styles(doc: DocxDocument) -> None:
     normal.font.name = FONT_NAME
     normal.font.size = Pt(11)
 
-    
-    toc1 = styles["TOC 1"]
+    toc1 = _get_or_create_paragraph_style(styles, "TOC 1", base_style_name="Normal")
     toc1.paragraph_format.left_indent = Inches(0)
     toc1.paragraph_format.first_line_indent = Inches(0)
     toc1.paragraph_format.space_before = Pt(0)
     toc1.paragraph_format.space_after = Pt(0)
 
-    toc2 = styles["TOC 2"]
+    toc2 = _get_or_create_paragraph_style(styles, "TOC 2", base_style_name="Normal")
     toc2.paragraph_format.left_indent = Inches(0.3)
     toc2.paragraph_format.first_line_indent = Inches(0)
     toc2.paragraph_format.space_before = Pt(0)
