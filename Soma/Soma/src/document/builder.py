@@ -93,22 +93,28 @@ class BPDDocumentBuilder:
 
     # ----------------------------------------------------------------- headings
 
+    @staticmethod
+    def _normalize_heading_text(text: str, *, uppercase: bool) -> str:
+        """Trim accidental leading/trailing whitespace from heading text."""
+        normalized = " ".join((text or "").split())
+        return normalized.upper() if uppercase else normalized
+
     def _add_heading(self, text: str) -> None:
         self._heading_counter += 1
         self._subheading_counter = 0
-        numbered = f"{self._heading_counter} {text.upper()}"
+        numbered = f"{self._heading_counter} {self._normalize_heading_text(text, uppercase=True)}"
         self.doc.add_paragraph(numbered, style=HEADING_STYLE)
 
     def _add_subheading(self, text: str) -> None:
         # Subheadings under a heading; if no heading yet, treat as 0.x.
         head = self._heading_counter if self._heading_counter > 0 else 0
         self._subheading_counter += 1
-        numbered = f"{head}.{self._subheading_counter} {text.upper()}"
+        numbered = f"{head}.{self._subheading_counter} {self._normalize_heading_text(text, uppercase=True)}"
         self.doc.add_paragraph(numbered, style=SUBHEADING_STYLE)
 
     def _add_normal_heading(self, text: str) -> None:
         # No uppercasing, no TOC, no empty line after.
-        self.doc.add_paragraph(text, style=NORMAL_HEADING_STYLE)
+        self.doc.add_paragraph((text or "").strip(), style=NORMAL_HEADING_STYLE)
 
     # ---------------------------------------------------------------- paragraph
 
