@@ -43,7 +43,9 @@ def add_table_of_contents(doc: DocxDocument) -> None:
     # \h        → hyperlinked entries
     # \z        → hide tab leader/page numbers in web view
     # \u        → use applied paragraph outline level
-    instr.text = r'TOC \o "1-2" \h \z \u'
+    #instr.text = r'TOC \o "1-2" \h \z \u'
+    instr.text = r'TOC \h \z \t "BPD Heading,1,BPD Subheading,2"'
+
 
     sep = OxmlElement("w:fldChar")
     sep.set(qn("w:fldCharType"), "separate")
