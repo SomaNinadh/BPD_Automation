@@ -12,7 +12,7 @@ from __future__ import annotations
 from docx.document import Document as DocxDocument
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt, RGBColor
+from docx.shared import Pt, RGBColor, Inches
 
 
 # Style name constants — referenced from the builder so we never type
@@ -91,3 +91,16 @@ def register_styles(doc: DocxDocument) -> None:
     normal = styles["Normal"]
     normal.font.name = FONT_NAME
     normal.font.size = Pt(11)
+
+    
+    toc1 = styles["TOC 1"]
+    toc1.paragraph_format.left_indent = Inches(0)
+    toc1.paragraph_format.first_line_indent = Inches(0)
+    toc1.paragraph_format.space_before = Pt(0)
+    toc1.paragraph_format.space_after = Pt(0)
+
+    toc2 = styles["TOC 2"]
+    toc2.paragraph_format.left_indent = Inches(0.3)
+    toc2.paragraph_format.first_line_indent = Inches(0)
+    toc2.paragraph_format.space_before = Pt(0)
+    toc2.paragraph_format.space_after = Pt(0)
