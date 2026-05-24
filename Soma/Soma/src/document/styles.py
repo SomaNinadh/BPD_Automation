@@ -46,7 +46,7 @@ def register_styles(doc: DocxDocument) -> None:
         heading.base_style = styles["Heading 1"]
         _set_font(heading, size_pt=16, bold=True)
         heading.paragraph_format.space_before = Pt(8)
-        heading.paragraph_format.space_after = Pt(2)
+        heading.paragraph_format.space_after = Pt(8)
         heading.paragraph_format.keep_with_next = True
 
     # --- Subheading (level 2) -------------------------------------------------
@@ -55,7 +55,7 @@ def register_styles(doc: DocxDocument) -> None:
         sub.base_style = styles["Heading 2"]
         _set_font(sub, size_pt=14, bold=True)
         sub.paragraph_format.space_before = Pt(6)
-        sub.paragraph_format.space_after = Pt(2)
+        sub.paragraph_format.space_after = Pt(4)
         sub.paragraph_format.keep_with_next = True
 
     # --- Normal Heading (NOT in TOC) -----------------------------------------
@@ -74,7 +74,9 @@ def register_styles(doc: DocxDocument) -> None:
         body.base_style = styles["Normal"]
         _set_font(body, size_pt=11, bold=False)
         body.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        body.paragraph_format.space_after = Pt(3)
+        body.paragraph_format.space_after = Pt(0)
+        body.paragraph_format.space_before = Pt(0)
+        body.paragraph_format.line_spacing = 1.0
 
     # --- Table cell text style ------------------------------------------------
     if TABLE_STYLE not in [s.name for s in styles]:
